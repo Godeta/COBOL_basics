@@ -1,9 +1,9 @@
       * tuto : https://stackoverflow.blog/2020/04/20/brush-up-your-cobol-why-is-a-60-year-old-language-suddenly-in-demand/
-      
+
       * Un programme COBOL à toujours une division identification et procedure. L'id permet d'appeler le programme dans un autre avec CALL
         IDENTIFICATION DIVISION.
-        PROGRAM-ID. HELLO.
-      * Récupère les données présentes dans TIMECARDS.DAT 
+        PROGRAM-ID. payRent.
+      * Récupère les données présentes dans TIMECARDS.DAT
        ENVIRONMENT DIVISION.
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -15,7 +15,7 @@
            FD TIMECARDS.
            01 TIMECARD.
                02 EMPLOYEE-NAME.
-      * Les 10 premiers caractères réservés pour le prénom, 15 suivantes pour nom. 01 et 02 l'ordre. 99V9 -> 4 type de valeurs numeric, decimal... 
+      * Les 10 premiers caractères réservés pour le prénom, 15 suivantes pour nom. 01 et 02 l'ordre. 99V9 -> 4 type de valeurs numeric, decimal...
                    03 EMP-FIRSTNAME PIC X(10).
                    03 EMP-SURNAME   PIC X(15).
                02 HOURS-WORKED PIC 99V9.
@@ -57,7 +57,7 @@
                88  EOF VALUE "T".
        PROCEDURE DIVISION.
        BEGIN.
-      * Tout ce que l'on va effectuer 
+      * Tout ce que l'on va effectuer
            PERFORM INITIALIZE-PROGRAM.
            DISPLAY 'Bienvenu dans ce premier programme !'
            PERFORM PROCESS-LINE WITH TEST BEFORE UNTIL EOF
@@ -66,7 +66,7 @@
        INITIALIZE-PROGRAM.
            OPEN INPUT TIMECARDS.
        PROCESS-LINE.
-      * met le T de stop à la fin 
+      * met le T de stop à la fin
            READ TIMECARDS INTO TIMECARD
                AT END MOVE "T" TO END-FILE.
            IF NOT EOF THEN
@@ -103,7 +103,7 @@
        COMPUTE-NET-PAY.
            SUBTRACT FED-TAX STATE-TAX FICA-TAX FROM GROSS-PAY
                GIVING NET-PAY
-           .          
+           .
        PRINT-CHECK.
            MOVE EMPLOYEE-NAME  TO PRT-EMPLOYEE-NAME
            MOVE HOURS-WORKED   TO PRT-HOURS-WORKED
@@ -114,8 +114,9 @@
            MOVE FICA-TAX       TO PRT-FICA-TAX
            MOVE NET-PAY        TO PRT-NET-PAY
            DISPLAY 'Fiche de paie :'
+      *     DISPLAY 'Pnom|nom|hTrav|paie|taxe fed|tx état|tx|gain net'
            DISPLAY PAYCHECK
            .
         CLEAN-UP.
            CLOSE TIMECARDS.
-        END PROGRAM HELLO.
+        END PROGRAM payRent.
